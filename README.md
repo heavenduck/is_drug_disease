@@ -7,8 +7,13 @@ source isproject/bin/activate   # aktivieren des Env
 ```
 
 ## Libs
+Macht Pycharm!
 ```python
-pip3 install Bio
+Bio
+Pandas
+Spacy
+Scispacy
+ML Model (en_ner_bc5cdr_md)
 ```
 
 ## Roadmap

@@ -3,22 +3,29 @@
 - diabetic
 
 # Datengrundlage für das "lernen" des Algorithmus
-- keine Idee wie wir hier so richtig ran gehen wollen 
-- Wahrscheinlich 1 Dokument per Hand klassifizieren
-- Problem: wie viele Bsp brachen wir
-- Aufgabe sagt nur positive Träningssätze verwenden
+- Pubmed 
+- Klassifizieren nach Disease und Drug
+- Wie viele BSP brauchen wir?
 
 # Methode
 - Kookurrenz als Hauptmethode 
-- wenn noch Zeit ist Regex als weiter (scheint jedoch sehr schwer zu werden)
 - Idee: In der Zusammenfassung auf die Schwierigkeit des Regex Ausdruckes eingehen und einen einfachen Ausdruck als Bsp. zeigen
   - erleichert uns die Aufgabe
   - scheint als hätten wir viel Zeit damit verbracht
 
 # Metriken
+- (dafür muss man manuell klassifizieren, eventuell relativ aufwendig)
 - Recall
 - prec
 - F-maß
 
-# Aufteilung
-NOCH ZU KLÄREN
+# Arbeitsschritte:
+- Datenbasis abrufen (Done: Arndt und Franz)
+- Text nach Drugs und Disease klassifizieren (Done: Franz)
+- Duplicate entfernen
+- Satzweise kookurrenz??
+- Threshhold festlegen, dann die größten Relationen visuell (per Graph?) darstellen
+- Präsentation:
+  - Vorstellung unserer Pipeline
+  - Nettes Ergebnis präsentieren
+  - Metriken auswerten
