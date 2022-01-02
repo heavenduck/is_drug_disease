@@ -33,3 +33,6 @@ class SpacyRecognizer:
         # displacy.serve(doc, style="ent")
 
         return df
+
+# currently, this class is not required since its functionality was transferred to the DrugFinder class
+# might still be useful for visualisation
