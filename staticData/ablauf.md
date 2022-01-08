@@ -29,3 +29,28 @@
   - Vorstellung unserer Pipeline
   - Nettes Ergebnis präsentieren
   - Metriken auswerten
+
+# Aufbau des Dicts zur Darstellung
+- 2 Listen: nodes + links
+- Bsp:
+
+``` javascript
+var nodes = [
+	{ id: <name:str> , group: <groupnummer:int> , label : <Bezeichnung im Graphen>}
+]
+
+var links = [
+	{ target: <link nach id> , source: < link von id> , strength : <Häufigkeit normiert>} 
+]
+```
+
+- id 	- Name von der Krankheit oder der Arzenei (unique)
+- group - 0 = Krankheit , 1 = Arzenei
+- label - Bezeichnung im Graphen
+
+- target 	- ID des Knotens zu dem die Kante hin führt
+- source 	- ID des Knotens von dem die Kante kommt
+- strength 	- normierte Anzahl der Auftritte zwischen 0 und 1
+
+
+  
