@@ -7,6 +7,9 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 pubmed = PubmedImpl()
 
 diseaseQuery = "hepatitis"  # will only work if the string is a single word because of tokenization
+
+# drugDict contains the name of the disease (.disease_name), the co-occurrence dictionary (.drug_dict)
+# and the odds ratio dictionary (.odds_ratio_dict)
 drugDict = DrugsForDiseaseDict(diseaseQuery)
 
 maxPapers = 200  # limit the number of papers retrieved
@@ -26,3 +29,6 @@ for r in records:
 # Fill drugDict with co-occurrences in text
 drug_finder = DrugFinder()
 drug_finder.qualify_text(text=text, drug_dict=drugDict)
+
+print(drugDict.drug_dict)
+print(drugDict.odds_ratio_dict)
