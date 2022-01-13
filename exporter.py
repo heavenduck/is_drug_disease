@@ -3,11 +3,17 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 
 class Exporter:
     dicts = {}
+    output_path = "visual/data_force.js"
 
     def add_to_export(self, name, dict):
         self.dicts[name] = dict
 
-    def export(self):
+    def export(self , threshhold):
+        
+        # remove all entry that are below the threshhold
+        for key in self.dicts:
+            self.dicts[key] = {key:val for key, val in self.dicts[key].items() if val > threshhold}   
+
         nodes = []
         links = []
         pre_nodes = {}
@@ -30,7 +36,7 @@ class Exporter:
         for link in pre_links:
             links.append(link.to_string())
 
-        with open("export.js", mode="w") as file:
+        with open(output_path , mode="w") as file:
            file.write("var nodes = [")
            
            first = True
@@ -41,7 +47,7 @@ class Exporter:
                else:
                    file.write("," + write_node + "\n")
 
-           file.write("]")
+           file.write("] \n")
            file.write("var links = [")
            
            first = True
@@ -53,6 +59,7 @@ class Exporter:
                    file.write("," + write_link + "\n")
            file.write("]")
 
+
 class Node:
     id = ""
     group = 1
@@ -63,7 +70,7 @@ class Node:
         self.label = node_label
 
     def to_string(self):
-        pre_string = "id: '{}' , group: {} , label: '{}'".format(self.id, self.group, self.label)
+        pre_string = "id: \"{}\" , group: {} , label: \"{}\"".format(self.id, self.group, self.label)
         return "{" + pre_string + "}"
 
 class Link:
@@ -76,5 +83,12 @@ class Link:
         self.strength = node_strength
 
     def to_string(self):
-        pre_string = "target: '{}' , source: '{}' , strength: '{}'".format(self.target, self.source, self.strength)
+        pre_string = "target: \"{}\" , source: \"{}\" , strength: \"{}\"".format(self.target, self.source, self.strength)
         return "{" + pre_string + "}"
+
+if __name__ == "__main__":
+  test_dict = {'e2': 7, 'bilirubin': 5, 'aluminum': 1, 'plga nps': 1}
+
+  exp = Exporter()
+  exp.add_to_export("hepatitis" , test_dict)
+  exp.export()

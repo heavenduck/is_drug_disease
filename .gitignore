@@ -1,9 +1,8 @@
-
 .idea/
-
-isproject/
-
 __pycache__/
 
+isproject/
 venv/
-export.js
+
+visual/data_force.js
+*.swp
