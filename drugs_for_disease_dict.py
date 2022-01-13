@@ -6,21 +6,26 @@ from math import log2
 
 
 class DrugsForDiseaseDict:
-    disease_name: str = ""
-    drug_dict = dict()   # co-occurrence dictionary
+    # disease_name: str = ""
+    # drug_dict = dict()   # co-occurrence dictionary
 
     filtered_words = ["covid-19", "alcohol", "smoking"]  # terms that are explicitly excluded because they are not drugs
 
     # odds ratio
     #############################################
-    number_of_sentences = 0   # number of all examined sentences
-    disease_occurrences = 0   # is currently assigned by drug_finder.py but could also be incremented by add_to_dict
-    drug_occurrences_dict = dict()   # stores the overall occurrence number of drugs
-    odds_ratio_dict = dict()
+    # number_of_sentences = 0   # number of all examined sentences
+    # disease_occurrences = 0   # is currently assigned by drug_finder.py but could also be incremented by add_to_dict
+    # drug_occurrences_dict = dict()   # stores the overall occurrence number of drugs
+    # odds_ratio_dict = dict()
     #############################################
 
     def __init__(self, disease_name: str):
         self.disease_name = disease_name
+        self.drug_dict = dict()
+        self.number_of_sentences = 0
+        self.disease_occurrences = 0
+        self.drug_occurrences_dict = dict()
+        self.odds_ratio_dict = dict()
 
     # converts tokens to string and increases their count in the dictionary (the dictionary will be unsorted)
     # filters certain CHEMICALs that are not drugs
@@ -63,3 +68,4 @@ class DrugsForDiseaseDict:
 
         # sorts the entries in odds_ratio_dict in descending order (they will have another order than drug_dict)
         self.odds_ratio_dict = dict(sorted(self.odds_ratio_dict.items(), key=lambda x: x[1], reverse=True))
+        # print(len(self.drug_dict))

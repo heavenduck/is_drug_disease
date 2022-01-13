@@ -8,7 +8,7 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 pubmed = PubmedImpl()
 
 #disease_list_string = input("Enter a list of diseases to query for seperated by ', '")
-disease_list_string = 'hepatitis, cancer'
+disease_list_string = 'hepatitis, cancer, diabetes'
 
 disease_list = disease_list_string.split(", ")
 
