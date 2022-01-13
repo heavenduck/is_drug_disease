@@ -15,7 +15,8 @@ class Exporter:
         
         # remove all entry that are below the threshhold
         for key in self.dicts:
-            self.dicts[key] = {key:val for key, val in self.dicts[key].items() if val > threshhold}   
+            max_apperance = max(self.dicts[key].values())
+            self.dicts[key] = {key:(val/max_apperance) for key, val in self.dicts[key].items() if val > threshhold}   
 
         nodes = []
         links = []

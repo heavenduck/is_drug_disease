@@ -8,7 +8,7 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 pubmed = PubmedImpl()
 
 #disease_list_string = input("Enter a list of diseases to query for seperated by ', '")
-disease_list_string = 'hepatitis'
+disease_list_string = 'hepatitis, cancer'
 
 disease_list = disease_list_string.split(", ")
 
@@ -21,7 +21,7 @@ for disease in disease_list:
     # and the odds ratio dictionary (.odds_ratio_dict)
     drugDict = DrugsForDiseaseDict(diseaseQuery)
 
-    maxPapers = 200  # limit the number of papers retrieved
+    maxPapers = 100  # limit the number of papers retrieved
     myQuery = diseaseQuery + "[tiab]"  # query in title and abstract
     records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
 
@@ -39,5 +39,6 @@ for disease in disease_list:
     drug_finder = DrugFinder()
     drug_finder.qualify_text(text=text, drug_dict=drugDict)
     exporter.add_to_export(disease, drugDict.drug_dict)
+    print(drugDict.drug_dict)
 
-exporter.export()
+exporter.export(1)
