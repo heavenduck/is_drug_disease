@@ -30,22 +30,28 @@ class Exporter:
         for link in pre_links:
             links.append(link.to_string())
 
-        with open("export.txt", mode="w") as file:
+        with open("export.js", mode="w") as file:
            file.write("var nodes = [")
+           
+           first = True
            for write_node in nodes:
-               file.write(write_node)
+               if first:
+                   file.write(write_node + "\n")
+                   first = False
+               else:
+                   file.write("," + write_node + "\n")
+
            file.write("]")
            file.write("var links = [")
+           
+           first = True
            for write_link in links:
-               file.write(write_link)
+               if first:
+                   file.write(write_link + "\n")
+                   first = False
+               else:
+                   file.write("," + write_link + "\n")
            file.write("]")
-
-
-            
-
-
-
-
 
 class Node:
     id = ""
@@ -70,5 +76,5 @@ class Link:
         self.strength = node_strength
 
     def to_string(self):
-        pre_string = "target: '{}' , source: {} , strength: '{}'".format(self.target, self.source, self.strength)
+        pre_string = "target: '{}' , source: '{}' , strength: '{}'".format(self.target, self.source, self.strength)
         return "{" + pre_string + "}"

@@ -6,3 +6,4 @@ isproject/
 __pycache__/
 
 venv/
+export.js
