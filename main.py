@@ -7,7 +7,8 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 
 pubmed = PubmedImpl()
 
-disease_list_string = input("Enter a list of diseases to query for seperated by ', '")
+#disease_list_string = input("Enter a list of diseases to query for seperated by ', '")
+disease_list_string = 'hepatitis'
 
 disease_list = disease_list_string.split(", ")
 
@@ -37,6 +38,6 @@ for disease in disease_list:
     # Fill drugDict with co-occurrences in text
     drug_finder = DrugFinder()
     drug_finder.qualify_text(text=text, drug_dict=drugDict)
-    exporter.add_to_export(disease, drugDict.odds_ratio_dict)
+    exporter.add_to_export(disease, drugDict.drug_dict)
 
 exporter.export()
