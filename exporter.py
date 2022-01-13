@@ -3,12 +3,15 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 
 class Exporter:
     dicts = {}
-    output_path = "visual/data_force.js"
+    output_path = ""
+    
+    def __init__(self):
+        self.output_path = "visual/data_force.js"
 
     def add_to_export(self, name, dict):
         self.dicts[name] = dict
 
-    def export(self , threshhold):
+    def export(self , threshhold=0):
         
         # remove all entry that are below the threshhold
         for key in self.dicts:
@@ -36,7 +39,7 @@ class Exporter:
         for link in pre_links:
             links.append(link.to_string())
 
-        with open(output_path , mode="w") as file:
+        with open(self.output_path , mode="w") as file:
            file.write("var nodes = [")
            
            first = True
