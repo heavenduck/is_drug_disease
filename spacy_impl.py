@@ -2,14 +2,26 @@ import scispacy
 import spacy
 import pandas as pd
 from spacy import displacy
+from scispacy.abbreviation import AbbreviationDetector
 
 
 class SpacyRecognizer:
     nlp = spacy.load("en_ner_bc5cdr_md")
+    # Abbrevaiation Detector
+    nlp.add_pipe("abbreviation_detector")
+
 
     def qualify_text(self, text):
         doc = self.nlp(text)
 
+        # replace acronyms with long form
+        altered_tok = [tok.text for tok in doc]
+        for abrv in doc._.abbreviations:
+            altered_tok[abrv.start] = str(abrv._.long_form)
+        text = (" ".join(altered_tok))
+
+        doc = self.nlp(text)
+        # now perform named entity recognition
         entities = []
         labels = []
         sentence_number = []
