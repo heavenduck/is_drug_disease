@@ -2,14 +2,15 @@ import networkx as nx
 from fa2 import ForceAtlas2
 import matplotlib.pyplot as plt
 
-def graph( data ):
-    G = nx.Graph()
+def graph( data , threshold=0):
+    graphX = nx.Graph()
 
     for disease in data:
         for drug in data[disease]:
-            G.add_edge(disease , drug , weight=data[disease][drug])
+            if data[disease][drug] > threshold:
+                graphX.add_edge(disease , drug , weight=data[disease][drug])
 
-    return G
+    return graphX
 
 def forceAtlas2Impl(G):
     forceatlas2 = ForceAtlas2(

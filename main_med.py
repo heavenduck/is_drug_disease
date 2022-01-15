@@ -1,9 +1,10 @@
 from pubmed_impl import PubmedImpl
-import spacy
+from drug_finder import DrugFinder
 from networkx_graph import *  # Implementation der Darstellung
 from dict_creator import DictCreator
 
 med7 = spacy.load("en_core_med7_lg")
+drug_finder = DrugFinder()
 
 def createSpacyPrintout(doc):
   """
@@ -22,9 +23,10 @@ def createSpacyPrintout(doc):
   spacy.displacy.serve(doc, style='ent', options=options)
 
 
-def getDrugs(disease_list , max_paper):
+def getDrugs(disease_list , max_paper=100):
   """
-  :param diseases:Array -
+  :param max_paper:
+  :param disease_list:Array -
   """
   
   returnDict = {} # {<disease> : <doc result>}
@@ -37,7 +39,8 @@ def getDrugs(disease_list , max_paper):
     myQuery = disease + "[tiab]"  # query in title and abstract
     records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
     
-    #TODO Bearbeitung der Paiper einzeln ansonsten RAM Overflow bei mehr als 500 Paipern
+    # TODO Bearbeitung der Paper einzeln ansonsten RAM Overflow bei mehr als 500 Papern
+
     # Concatenate Abstracts to one long string
     text: str = ''
     for r in records:
@@ -48,14 +51,42 @@ def getDrugs(disease_list , max_paper):
 
     returnDict = {disease : doc}
  
-    #createSpacyPrintout(doc)
+    # createSpacyPrintout(doc)
   return returnDict
 
 
+def getDiseases(drug_list, max_paper):
+  """
+  :param drugs:Array -
+  """
 
-#datadict = drug_dict.getDictNormalized(1)
-#g = graph(datadict)
-#forceAtlas2Impl(g)
+  returnDict = {}  # {<disease> : <doc result>}
+
+  pubmed = PubmedImpl()
+
+  for drug in drug_list:
+
+    maxPapers = max_paper  # limit the number of papers retrieved
+    myQuery = drug + "[tiab]"  # query in title and abstract
+    records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
+
+    # TODO Bearbeitung der Paper einzeln ansonsten RAM Overflow bei mehr als 500 Papern
+
+    # Concatenate Abstracts to one long string
+    text: str = ''
+    for r in records:
+      if 'AB' in r:
+        text += (r['AB'])
+
+    doc = drug_finder.spacy(text)
+
+    returnDict = {drug: doc}
+
+  return returnDict
+
+# datadict = drug_dict.getDictNormalized(1)
+# g = graph(datadict)
+# forceAtlas2Impl(g)
 
 if __name__ == "__main__":
   

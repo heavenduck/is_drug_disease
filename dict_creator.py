@@ -17,7 +17,7 @@ class DictCreator():
     
     return dictStorageNorm  
 
-  def addNewDisease(self , disease , doc_data):
+  def addNewDisease(self, disease, doc_data):
     
     self.diseases.append(disease)
     self.dictStorage[disease] = {}
@@ -29,6 +29,13 @@ class DictCreator():
         else:
           self.dictStorage[disease].update({ entity.text : 1}) 
 
+  def getNewDiseasesFromDrug(self, doc_data):
+    result = []
+    for entity in doc_data.ents:
+      if entity.label_ == 'DISEASE' and entity.text not in (self.dictStorage + result):
+        result.append(entity.text)
+    return result
+
   def getAllDiseases(self):
     return self.diseases 
 
@@ -39,10 +46,10 @@ class DictCreator():
     
     # Array der ersten Elemente 
     cut_dict = dict_sorted_asc[:amount] 
-    # letzes Element des abgeschnitten Array nehemen 
+    # letztes Element des abgeschnittenen Arrays nehmen
     last_ele = cut_dict[-1]
     
-    # 
+    # alle Elemente über amount hinaus anhängen, solange sie die gleiche Kookkurrenz haben wie last_ele
     if len(dict_sorted_asc) > amount:
       found_index = 0
       for ele in dict_sorted_asc[amount:]:

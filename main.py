@@ -3,42 +3,34 @@ from exporter import Exporter
 from pubmed_impl import PubmedImpl
 from spacy_impl import SpacyRecognizer
 from drugs_for_disease_dict import DrugsForDiseaseDict
+from main_med import *
 
+current_diseases = ["SARS-Cov-2"]
+max_paper = 100
+max_iterations = 2
+dictResult = DictCreator()
 
-pubmed = PubmedImpl()
+for i in range(max_iterations):
 
-#disease_list_string = input("Enter a list of diseases to query for seperated by ', '")
-disease_list_string = 'antibiotic'
+    # Pubmed Anfragen über alle Krankheiten in current_diseases:
+    # Top x der Medikamente aus erster Anfrage (max_paper = Anzahl Paper)
+    resultDiseases = getDrugs(current_diseases, max_paper)
 
-disease_list = disease_list_string.split(", ")
+    # Filterung aller Medikamente in den Artikeln
+    top_drugs = []
+    for disease in resultDiseases:
+        dictResult.addNewDisease(disease, resultDiseases[disease])
+        # Rückgabe der Top x Medikamente für Krankheit x
+        top_drugs += dictResult.getTopEntriesOfDict(disease, 10)
 
-exporter = Exporter()
+    # Pubmed Anfragen über alle Medikamente in top_drugs
+    resultDrugs = getDiseases(top_drugs, max_paper)
 
-for disease in disease_list:
-    diseaseQuery = disease  # will only work if the string is a single word because of tokenization
+    # Herausfinden aller Krankheiten in den Papern
+    current_diseases = []
+    for drug in resultDrugs:
+        current_diseases += dictResult.getNewDiseasesFromDrug(result[drug])
 
-    # drugDict contains the name of the disease (.disease_name), the co-occurrence dictionary (.drug_dict)
-    # and the odds ratio dictionary (.odds_ratio_dict)
-    drugDict = DrugsForDiseaseDict(diseaseQuery)
-
-    maxPapers = 100  # limit the number of papers retrieved
-    myQuery = diseaseQuery + "[tiab]"  # query in title and abstract
-    records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
-
-    # Concatenate Abstracts to one long string
-    text: str = ''
-    for r in records:
-        if 'AB' in r:
-            text += (r['AB'])
-
-    # Named entity recognition by spacy
-    sp = SpacyRecognizer()
-    print(sp.qualify_text(text=text))
-
-    # Fill drugDict with co-occurrences in text
-    #drug_finder = DrugFinder()
-    #drug_finder.qualify_text(text=text, drug_dict=drugDict)
-    #exporter.add_to_export(disease, drugDict.drug_dict)
-    #print(drugDict.drug_dict)
-
-#exporter.export(1)
+# TODO Pubmed Anfrage: Top 20-50 Krankheiten
+# Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
+# Zeichnen der Knoten
