@@ -1,4 +1,5 @@
 from pubmed_impl import PubmedImpl
+import spacy
 from drug_finder import DrugFinder
 from networkx_graph import *  # Implementation der Darstellung
 from dict_creator import DictCreator
@@ -77,34 +78,11 @@ def getDiseases(drug_list, max_paper):
     for r in records:
       if 'AB' in r:
         text += (r['AB'])
+    
 
     doc = drug_finder.spacy(text)
-
     returnDict = {drug: doc}
-
+  
   return returnDict
 
-# datadict = drug_dict.getDictNormalized(1)
-# g = graph(datadict)
-# forceAtlas2Impl(g)
-
-if __name__ == "__main__":
-  
-  start_disease = "SARS-Cov-2"
-  max_paper = 100
-
-  #Pubmed Anfrage: eine Krankheit (300-500 Paper)
-  resultFistStep = getDrugs([start_disease] , max_paper)
-  
-  #Filterung aller Medikamente in den Artikeln
-  dictFirstResult = DictCreator()
-  dictFirstResult.addNewDisease(start_disease , resultFistStep[start_disease])
-  top_disease = dictFirstResult.getTopEntriesOfDict(start_disease , 10) 
-
-  #Pubmed Anfrage: Top 20 der Medikamente aus erster Anfrage (300-500 Paper)
-  #Herausfinden aller Krankheiten in den Papern
-  #Pubmed Anfrage: Top 20-50 Krankheiten
-  #Erstellung Dict aus der Letzen Anfrage und deren Auswertung
-  #Knoten mit nur 1 Kante entfernen oder Threshhold einbauen?
-  #Zeichnen der Knoten 
 

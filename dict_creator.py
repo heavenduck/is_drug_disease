@@ -7,8 +7,12 @@ class DictCreator():
   def getDict(self):
     return self.dictStorage
   
+  def getAllDiseases(self):
+    return self.diseases 
+  
+  """ 
   def getDictNormalized(self , threshhold=1):
-
+  
     dictStorageNorm = self.dictStorage
 
     for key in dictStorageNorm:
@@ -16,7 +20,8 @@ class DictCreator():
       dictStorageNorm[key] = {key:(val/max_apperance) for key, val in dictStorageNorm[key].items() if val > threshhold}   
     
     return dictStorageNorm  
-
+  """
+  
   def addNewDisease(self, disease, doc_data):
     
     self.diseases.append(disease)
@@ -30,17 +35,23 @@ class DictCreator():
           self.dictStorage[disease].update({ entity.text : 1}) 
 
   def getNewDiseasesFromDrug(self, doc_data):
-    result = []
+    result = {}
     for entity in doc_data.ents:
-      if entity.label_ == 'DISEASE' and entity.text not in (self.dictStorage + result):
-        result.append(entity.text)
+
+      if entity.label_ == 'DISEASE' and entity.text not in self.dictStorage.keys():
+        if entity.text in result:
+          result[entity.text] += 1
+        else:
+          result.update({ entity.text : 1}) 
+        
     return result
 
-  def getAllDiseases(self):
-    return self.diseases 
 
   def getTopEntriesOfDict(self , key , amount):
     
+    if "December" in self.dictStorage[key]:
+      del self.dictStorage[key]["December"]
+
     # Umwandlung von Dict zu sortierter Liste
     dict_sorted_asc = sorted(self.dictStorage[key].items(), key=lambda x: x[1] , reverse=True)    
     
@@ -61,6 +72,8 @@ class DictCreator():
       newList = dict_sorted_asc[amount : amount + found_index]
       cut_dict += newList
     
-    print(dict_sorted_asc)
+    returnArray = []
+    for ele in cut_dict:
+      returnArray.append(ele[0]) 
 
-    return cut_dict
+    return returnArray
