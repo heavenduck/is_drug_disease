@@ -42,7 +42,7 @@ class SpacyRecognizer:
         df = pd.DataFrame({'Entities': entities, 'Labels': labels, 'Sentence Number': sentence_number})
 
         # Uncomment if you want to visualize labelling
-        # displacy.serve(doc, style="ent")
+        displacy.serve(doc, style="ent")
 
         return df
 

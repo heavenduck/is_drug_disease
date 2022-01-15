@@ -8,7 +8,7 @@ from drugs_for_disease_dict import DrugsForDiseaseDict
 pubmed = PubmedImpl()
 
 #disease_list_string = input("Enter a list of diseases to query for seperated by ', '")
-disease_list_string = 'hepatitis, cancer, diabetes'
+disease_list_string = 'antibiotic'
 
 disease_list = disease_list_string.split(", ")
 
@@ -32,13 +32,13 @@ for disease in disease_list:
             text += (r['AB'])
 
     # Named entity recognition by spacy
-    # sp = SpacyRecognizer()
-    # print(sp.qualify_text(text=text))
+    sp = SpacyRecognizer()
+    print(sp.qualify_text(text=text))
 
     # Fill drugDict with co-occurrences in text
-    drug_finder = DrugFinder()
-    drug_finder.qualify_text(text=text, drug_dict=drugDict)
-    exporter.add_to_export(disease, drugDict.drug_dict)
-    print(drugDict.drug_dict)
+    #drug_finder = DrugFinder()
+    #drug_finder.qualify_text(text=text, drug_dict=drugDict)
+    #exporter.add_to_export(disease, drugDict.drug_dict)
+    #print(drugDict.drug_dict)
 
-exporter.export(1)
+#exporter.export(1)

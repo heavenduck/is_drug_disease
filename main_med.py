@@ -1,44 +1,9 @@
 from pubmed_impl import PubmedImpl
 import spacy
-from networkx_graph import *
+from networkx_graph import *  # Implementation der Darstellung
 from dict_creator import DictCreator
 
-
-pubmed = PubmedImpl()
-drug_dict = DictCreator()
-
 med7 = spacy.load("en_core_med7_lg")
-med7.max_length = 2000000
-
-disease_list_string = 'hepatitis, cancer'
-disease_list = disease_list_string.split(", ")
-
-for disease in disease_list:
-  
-  diseaseQuery = disease  # will only work if the string is a single word because of tokenization
-
-  maxPapers = 600  # limit the number of papers retrieved
-  myQuery = diseaseQuery + "[tiab]"  # query in title and abstract
-  records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
-
-  # Concatenate Abstracts to one long string
-  text: str = ''
-  for r in records:
-    if 'AB' in r:
-      text += (r['AB'])
-
-
-  doc = med7(text)
-  drug_dict.addNewDisease(diseaseQuery , doc)
-  
-  #createSpacyPrintout(doc)
-
-
-
-datadict = drug_dict.getDictNormalized(1)
-g = graph(datadict)
-forceAtlas2Impl(g)
-
 
 def createSpacyPrintout(doc):
   """
@@ -55,3 +20,60 @@ def createSpacyPrintout(doc):
   options = {'ents': med7.pipe_labels['ner'], 'colors':col_dict}
   
   spacy.displacy.serve(doc, style='ent', options=options)
+
+
+def getDrugs(disease_list , max_paper):
+  """
+  :param diseases:Array -
+  """
+  
+  returnDict = {} # {<disease> : <doc result>}
+
+  pubmed = PubmedImpl()
+
+  for disease in disease_list:
+  
+    maxPapers = max_paper  # limit the number of papers retrieved
+    myQuery = disease + "[tiab]"  # query in title and abstract
+    records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
+    
+    #TODO Bearbeitung der Paiper einzeln ansonsten RAM Overflow bei mehr als 500 Paipern
+    # Concatenate Abstracts to one long string
+    text: str = ''
+    for r in records:
+      if 'AB' in r:
+        text += (r['AB'])
+    
+    doc = med7(text)
+
+    returnDict = {disease : doc}
+ 
+    #createSpacyPrintout(doc)
+  return returnDict
+
+
+
+#datadict = drug_dict.getDictNormalized(1)
+#g = graph(datadict)
+#forceAtlas2Impl(g)
+
+if __name__ == "__main__":
+  
+  start_disease = "SARS-Cov-2"
+  max_paper = 100
+
+  #Pubmed Anfrage: eine Krankheit (300-500 Paper)
+  resultFistStep = getDrugs([start_disease] , max_paper)
+  
+  #Filterung aller Medikamente in den Artikeln
+  dictFirstResult = DictCreator()
+  dictFirstResult.addNewDisease(start_disease , resultFistStep[start_disease])
+  top_disease = dictFirstResult.getTopEntriesOfDict(start_disease , 10) 
+
+  #Pubmed Anfrage: Top 20 der Medikamente aus erster Anfrage (300-500 Paper)
+  #Herausfinden aller Krankheiten in den Papern
+  #Pubmed Anfrage: Top 20-50 Krankheiten
+  #Erstellung Dict aus der Letzen Anfrage und deren Auswertung
+  #Knoten mit nur 1 Kante entfernen oder Threshhold einbauen?
+  #Zeichnen der Knoten 
+

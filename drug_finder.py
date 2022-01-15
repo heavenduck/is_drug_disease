@@ -42,7 +42,7 @@ class DrugFinder:
                 # Filter out 'entity' label
                 if ent.label_ != 'ENTITY':
                     # Aggregate all Chemicals of the sentence
-                    if ent.label_ == 'CHEMICAL':
+                    if ent.label_ == 'DISEASE':
                         drugs_in_sentence.append(ent)
                     # Check if the sentence contains the queried disease
                     if not sentence_contains_disease and drug_dict.disease_name in [str(token).lower() for token in ent]:

@@ -32,4 +32,28 @@ class DictCreator():
   def getAllDiseases(self):
     return self.diseases 
 
+  def getTopEntriesOfDict(self , key , amount):
+    
+    # Umwandlung von Dict zu sortierter Liste
+    dict_sorted_asc = sorted(self.dictStorage[key].items(), key=lambda x: x[1] , reverse=True)    
+    
+    # Array der ersten Elemente 
+    cut_dict = dict_sorted_asc[:amount] 
+    # letzes Element des abgeschnitten Array nehemen 
+    last_ele = cut_dict[-1]
+    
+    # 
+    if len(dict_sorted_asc) > amount:
+      found_index = 0
+      for ele in dict_sorted_asc[amount:]:
+        if ele[1] == last_ele[1]:
+          found_index += 1
+        else:
+          break
+      
+      newList = dict_sorted_asc[amount : amount + found_index]
+      cut_dict += newList
+    
+    print(dict_sorted_asc)
 
+    return cut_dict
