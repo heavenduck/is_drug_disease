@@ -23,9 +23,9 @@ for i in range(max_iterations):
     resultDrugs = getDiseases(top_drugs, max_paper)
     
     # Herausfinden aller Krankheiten in den Papern
-    current_diseases = []
+    current_diseases = {}
     for drug in resultDrugs:
-        current_diseases += dictResult.getNewDiseasesFromDrug(resultDrugs[drug])
+        current_diseases = addDict(current_diseases, dictResult.getNewDiseasesFromDrug(resultDrugs[drug]))
     
 
 # TODO Pubmed Anfrage: Top 20-50 Krankheiten
@@ -37,3 +37,19 @@ for i in range(max_iterations):
 # forceAtlas2Impl(g)
 
 
+def addDict(dict1, dict2):
+    """
+    :param dict1: Dictionary
+    :param dict2: Dictionary
+    :return: Dictionary mit addierte Values bei Shared Keys
+    """
+    result = {}
+    for key in dict1:
+        if key in dict2:
+            result[key] = dict1[key]+dict2[key]
+        else:
+            result[key] = dict1[key]
+    for key in dict2:
+        if key not in dict1:
+            result[key] = dict2[key]
+    return result
