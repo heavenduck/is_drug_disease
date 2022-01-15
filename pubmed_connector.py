@@ -49,7 +49,7 @@ def getDrugs(disease_list , max_paper=100):
     
     doc = med7(text)
 
-    returnDict = {disease : doc}
+    returnDict[disease] = doc
  
     # createSpacyPrintout(doc)
   return returnDict
@@ -80,7 +80,8 @@ def getDiseases(drug_list, max_paper):
     
 
     doc = drug_finder.spacy(text)
-    returnDict = {drug: doc}
+    
+    returnDict[drug] =  doc
   
   return returnDict
 

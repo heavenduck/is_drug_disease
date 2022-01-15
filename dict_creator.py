@@ -10,16 +10,6 @@ class DictCreator():
   def getAllDiseases(self):
     return self.diseases 
   
-  def getDictNormalized(self , threshhold=1):
-  
-    dictStorageNorm = self.dictStorage
-
-    for key in dictStorageNorm:
-      max_apperance = max(dictStorageNorm[key].values())
-      dictStorageNorm[key] = {key:(val/max_apperance) for key, val in dictStorageNorm[key].items() if val > threshhold}   
-    
-    return dictStorageNorm  
-  
   def addNewDisease(self, disease, doc_data):
     
     self.diseases.append(disease)
