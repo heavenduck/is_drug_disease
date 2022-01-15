@@ -1,4 +1,5 @@
 from pubmed_connector import *
+from networkx_graph import *  # Implementation der Darstellung
 
 current_diseases = ["SARS-Cov-2"]
 max_paper = 100
@@ -18,9 +19,9 @@ for i in range(max_iterations):
         # Rückgabe der Top x Medikamente für Krankheit x
         top_drugs += dictResult.getTopEntriesOfDict(disease, 10)
     
-
-    # Pubmed Anfragen über alle Medikamente in top_drugs
-    resultDrugs = getDiseases(top_drugs, max_paper)
+    if i != max_iterations:
+        # Pubmed Anfragen über alle Medikamente in top_drugs
+        resultDrugs = getDiseases(top_drugs, max_paper)
     
     # Herausfinden aller Krankheiten in den Papern
     current_diseases = {}
@@ -32,9 +33,9 @@ for i in range(max_iterations):
 # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
 # Zeichnen der Knoten
 
-# datadict = drug_dict.getDictNormalized(1)
-# g = graph(datadict)
-# forceAtlas2Impl(g)
+datadict = dictResult.getDictNormalized(1)
+g = graph(datadict)
+forceAtlas2Impl(g)
 
 
 def addDict(dict1, dict2):

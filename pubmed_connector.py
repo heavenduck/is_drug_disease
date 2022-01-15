@@ -1,7 +1,6 @@
 from pubmed_impl import PubmedImpl
 import spacy
 from drug_finder import DrugFinder
-from networkx_graph import *  # Implementation der Darstellung
 from dict_creator import DictCreator
 
 med7 = spacy.load("en_core_med7_lg")
