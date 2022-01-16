@@ -13,11 +13,6 @@ class Exporter:
 
     def export(self , threshhold=0):
         
-        # remove all entry that are below the threshhold
-        for key in self.dicts:
-            max_apperance = max(self.dicts[key].values())
-            self.dicts[key] = {key:(val/max_apperance) for key, val in self.dicts[key].items() if val > threshhold}   
-
         nodes = []
         links = []
         pre_nodes = {}

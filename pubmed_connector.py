@@ -6,27 +6,10 @@ from dict_creator import DictCreator
 med7 = spacy.load("en_core_med7_lg")
 drug_finder = DrugFinder()
 
-def createSpacyPrintout(doc):
-  """
-  create a colored print out of the labes in the text via spacy
-  :param doc: solution of a med7() function
-  """
-
-  # create distinct colours for labels
-  col_dict = {}
-  seven_colours = ['#e6194B', '#3cb44b', '#ffe119', '#ffd8b1', '#f58231', '#f032e6', '#42d4f4']
-  for label, colour in zip(med7.pipe_labels['ner'], seven_colours):
-    col_dict[label] = colour
-
-  options = {'ents': med7.pipe_labels['ner'], 'colors':col_dict}
-  
-  spacy.displacy.serve(doc, style='ent', options=options)
-
-
-def getDrugs(disease_list , max_paper=100):
-  """
-  :param max_paper:
-  :param disease_list:Array -
+def getDrugs(disease_list , max_paper):
+  """ Routine zur Abfrage von Pubmed Paper über die Krankheiten
+  :param max_paper: Anzahl der anzufragenden Paper
+  :param disease_list:Array mit allen Krankheiten
   """
   
   returnDict = {} # {<disease> : <doc result>}
@@ -39,8 +22,6 @@ def getDrugs(disease_list , max_paper=100):
     myQuery = disease + "[tiab]"  # query in title and abstract
     records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
     
-    # TODO Bearbeitung der Paper einzeln ansonsten RAM Overflow bei mehr als 500 Papern
-
     # Concatenate Abstracts to one long string
     text: str = ''
     for r in records:
@@ -56,8 +37,9 @@ def getDrugs(disease_list , max_paper=100):
 
 
 def getDiseases(drug_list, max_paper):
-  """
-  :param drugs:Array -
+  """ Routine zur Abfrage von Pubmed Paper über die Medikamente
+  :param max_paper: Anzahl der anzufragenden Paper
+  :param drug_list:Array mit allen Medikamenten
   """
 
   returnDict = {}  # {<disease> : <doc result>}
@@ -69,8 +51,6 @@ def getDiseases(drug_list, max_paper):
     maxPapers = max_paper  # limit the number of papers retrieved
     myQuery = drug + "[tiab]"  # query in title and abstract
     records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
-
-    # TODO Bearbeitung der Paper einzeln ansonsten RAM Overflow bei mehr als 500 Papern
 
     # Concatenate Abstracts to one long string
     text: str = ''

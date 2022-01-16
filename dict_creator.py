@@ -9,12 +9,17 @@ class DictCreator():
   
   def getAllDiseases(self):
     return self.diseases 
-  
-  def addNewDisease(self, disease, doc_data):
     
+  def addNewDisease(self, disease, doc_data):
+    """ Hinzufügen einer neuen Krankheit mit deren Medikamenten
+    :param disease: hinzuzufügende Krankheit 
+    :param doc_data: Ergebnis eines Entitäten Erkenners von Spacy (noch nicht nach Drugs gefiltert)
+    """
+
     self.diseases.append(disease)
     self.dictStorage[disease] = {}
-
+    
+    # Iteration über die Entitäten von doc_data -> Filterung nach DRUG + Auftreten des Medikamentes
     for entity in doc_data.ents:
       if entity.label_ == 'DRUG':
         if entity.text in self.dictStorage[disease]:
@@ -23,6 +28,11 @@ class DictCreator():
           self.dictStorage[disease].update({ entity.text : 1}) 
 
   def getNewDiseasesFromDrug(self, doc_data):
+    """ Ermittlung neuer Krankheiten aus den Entitäten eines Medikamentes 
+    :param doc_data: Ergebnis eines Entitäten Erkenners von Spacy (noch nicht nach DISEASE gefiltert)
+    :return : Dict {<Krankheit> : <Häufigkeit des Auftretens>}
+    """
+    
     result = {}
     for entity in doc_data.ents:
 
@@ -36,6 +46,10 @@ class DictCreator():
 
 
   def getTopEntriesOfDict(self , key , amount):
+    """ Ermittlung der ersten N Elemente 
+    :param key: die ausgewählte Krankheit
+    :param amount: Anzahl der zu bestimmenden Elemente
+    """
     
     if "December" in self.dictStorage[key]:
       del self.dictStorage[key]["December"]

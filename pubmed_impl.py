@@ -2,6 +2,7 @@ from Bio import Entrez, Medline
 
 
 class PubmedImpl:
+    """ Vorlagen Klasse zur Anfrage an Pubmed """
     def getPapers(self, myQuery, maxPapers=10, myEmail="xxx.xxx@mailbox.tu-dresden.de") -> list:
         # Get articles from PubMed
         Entrez.email = myEmail

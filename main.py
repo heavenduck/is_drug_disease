@@ -49,18 +49,22 @@ for i in range(max_iterations):
             temp_current_diseases = addDict(temp_current_diseases, dictResult.getNewDiseasesFromDrug(resultDrugs[drug]))
         
         current_diseases_sorted_asc = sorted(temp_current_diseases.items(), key=lambda x: x[1] , reverse=True)    
-        print(current_diseases_sorted_asc)
+        
+        # Ausgabe aller Krankheiten nach Auftreten sortiert
+        print(current_diseases_sorted_asc) 
+        
+        # Pubmed Anfrage: Top 20-50 Krankheiten
         current_diseases = [el[0] for el in current_diseases_sorted_asc[:15]]
         
 
-# TODO Pubmed Anfrage: Top 20-50 Krankheiten
 # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
-# Zeichnen der Knoten
 
 print(dictResult.dictStorage)
 
-datadict = dictResult.getDict()
-g = graph(datadict)
+# Erstellen des Graphen durch networkx 
+g = graph(dictResult.getDict())
+
+# Zeichnen des Graphen mitels fa2
 forceAtlas2Impl(g)
 
 
