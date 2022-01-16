@@ -1,10 +1,9 @@
 from pubmed_impl import PubmedImpl
 import spacy
-from drug_finder import DrugFinder
+from entity_finder import EntityFinder
 from dict_creator import DictCreator
 
-med7 = spacy.load("en_core_med7_lg")
-drug_finder = DrugFinder()
+entity_finder = EntityFinder()
 
 def getDrugs(disease_list , max_paper):
   """ Routine zur Abfrage von Pubmed Paper über die Krankheiten
@@ -28,7 +27,7 @@ def getDrugs(disease_list , max_paper):
       if 'AB' in r:
         text += (r['AB'])
     
-    doc = med7(text)
+    doc = entity_finder.med7spacy(text)
 
     returnDict[disease] = doc
  
@@ -57,11 +56,10 @@ def getDiseases(drug_list, max_paper):
     for r in records:
       if 'AB' in r:
         text += (r['AB'])
-    
 
-    doc = drug_finder.spacy(text)
+    doc = entity_finder.spacy(text)
     
-    returnDict[drug] =  doc
+    returnDict[drug] = doc
   
   return returnDict
 
