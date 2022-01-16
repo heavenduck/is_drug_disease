@@ -1,6 +1,5 @@
 from datetime import datetime
 import spacy
-from drugs_for_disease_dict import DrugsForDiseaseDict
 from scispacy.abbreviation import AbbreviationDetector
 
 
@@ -10,19 +9,20 @@ from scispacy.abbreviation import AbbreviationDetector
 class DrugFinder:
     nlp = spacy.load("en_ner_bc5cdr_md")
     # Abbreviation Detector
-    # nlp.add_pipe("abbreviation_detector")
+    nlp.add_pipe("abbreviation_detector")
 
     def spacy(self, text: str):
-        print("get ents " + str(datetime.now()))  # time measurement: start of entity recognition
+        
         doc = self.nlp(text)
-        return doc
-"""
-        print("get abrv " + str(datetime.now()))  # time measurement: start of abbreviation replacement
+        
         # replace acronyms with long form
         altered_tok = [tok.text for tok in doc]
+        
         for abrv in doc._.abbreviations:
             altered_tok[abrv.start] = str(abrv._.long_form)
+        
         text = (" ".join(altered_tok))
 
         doc = self.nlp(text)
-"""
+
+        return doc
