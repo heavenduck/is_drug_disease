@@ -38,7 +38,7 @@ for i in range(max_iterations):
     for disease in resultDiseases:
         dictResult.addNewDisease(disease, resultDiseases[disease])
         # Rückgabe der Top x Medikamente für Krankheit x
-        top_drugs += dictResult.getTopEntriesOfDict(disease, 10)
+        top_drugs += dictResult.getTopEntriesOfDict(disease, 15)
 
     print(top_drugs)
 
@@ -58,7 +58,7 @@ for i in range(max_iterations):
         print(current_diseases_sorted_asc)
 
         # Pubmed Anfrage: Top 20-50 Krankheiten
-        current_diseases = [el[0] for el in current_diseases_sorted_asc[:15]]
+        current_diseases = [el[0] for el in current_diseases_sorted_asc[:20]]
 
 # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
 
