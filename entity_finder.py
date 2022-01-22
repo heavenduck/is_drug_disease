@@ -14,9 +14,6 @@ class EntityFinder:
     
     med7 = spacy.load("en_core_med7_lg")
     med7.add_pipe("abbreviation_detector")
-    # Abbreviation Detector
-    nlp.add_pipe("abbreviation_detector")
-    med7.add_pipe("abbreviation_detector")
 
     def spacy(self, text: str):
         doc = self.nlp(text)
