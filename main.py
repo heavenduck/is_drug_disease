@@ -1,7 +1,9 @@
+from datetime import datetime
+
 from pubmed_connector import *
 from networkx_graph import *  # Implementation der Darstellung
 
-current_diseases = ["SARS-Cov-2"]
+current_diseases = ["hepatitis"]
 max_paper = 100
 max_iterations = 2
 dictResult = DictCreator()
@@ -31,13 +33,12 @@ for i in range(max_iterations):
     # Pubmed Anfragen über alle Krankheiten in current_diseases:
     # Top x der Medikamente aus erster Anfrage (max_paper = Anzahl Paper)
     resultDiseases = getDrugs(current_diseases, max_paper)
-
     # Filterung aller Medikamente in den Artikeln
     top_drugs = []
     for disease in resultDiseases:
         dictResult.addNewDisease(disease, resultDiseases[disease])
         # Rückgabe der Top x Medikamente für Krankheit x
-        top_drugs += dictResult.getTopEntriesOfDict(disease, 10)
+        top_drugs += dictResult.getTopEntriesOfDict(disease, 5)
     
     if i != max_iterations-1:
         # Pubmed Anfragen über alle Medikamente in top_drugs
@@ -51,13 +52,23 @@ for i in range(max_iterations):
         current_diseases_sorted_asc = sorted(temp_current_diseases.items(), key=lambda x: x[1] , reverse=True)    
         
         # Ausgabe aller Krankheiten nach Auftreten sortiert
-        print(current_diseases_sorted_asc) 
-        
+        print(current_diseases_sorted_asc)
+
+        # Rausfiltern von falschen Einträgen
+        dictResult.filter_diseases(current_diseases_sorted_asc)
+
         # Pubmed Anfrage: Top 20-50 Krankheiten
-        current_diseases = [el[0] for el in current_diseases_sorted_asc[:15]]
+        current_diseases = [el[0] for el in current_diseases_sorted_asc[:5]]
         
 
 # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
+"""
+# Entfernt alle einträge mit Kookkurrenz von 1
+for disease in dictResult.dictStorage:
+    for drug in list(dictResult.dictStorage[disease].keys()):
+        if dictResult.dictStorage[disease][drug] == 1:
+            dictResult.dictStorage[disease].pop(drug)
+"""
 
 print(dictResult.dictStorage)
 

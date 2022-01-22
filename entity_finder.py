@@ -6,14 +6,17 @@ from scispacy.abbreviation import AbbreviationDetector
 # this class is a modified version of the spacy_impl
 # it finds the co-occurrences of drugs and a specific disease (drug_dict)
 # it does not differentiate between positive and negative sentences (yet)
+
+
 class EntityFinder:
     nlp = spacy.load("en_ner_bc5cdr_md")
     med7 = spacy.load("en_core_med7_lg")
     # Abbreviation Detector
-
+    nlp.add_pipe("abbreviation_detector")
+    med7.add_pipe("abbreviation_detector")
 
     def spacy(self, text: str):
-        nlp.add_pipe("abbreviation_detector")
+
         doc = self.nlp(text)
         
         # replace acronyms with long form
@@ -28,8 +31,21 @@ class EntityFinder:
 
         return doc
 
-    def med7spacy(self, text: str):
-        med7.add_pipe("abbreviation_detector")
+    def med7spacy(self, text: str, disease: str):
+        """
+        # Entfernt alle Sätze, in denen die Krankheit nicht vorkommt.
+        # Dadurch wird die Kookkurrenz auf Satzebene ermittelt.
+        doc = self.nlp(text)
+        relevant_sentences = []
+
+        for sent in doc.sents:
+            tokens_in_sent = [ent.text.lower() for ent in sent.ents]
+            if disease in tokens_in_sent:
+                relevant_sentences += [ent.text for ent in sent]
+
+        text = (" ".join(relevant_sentences))
+        """
+
         doc = self.med7(text)
 
         # replace acronyms with long form
@@ -40,6 +56,6 @@ class EntityFinder:
 
         text = (" ".join(altered_tok))
 
-        doc = self.medy(text)
+        doc = self.med7(text)
 
         return doc

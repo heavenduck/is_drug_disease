@@ -18,29 +18,32 @@ class DictCreator():
 
     self.diseases.append(disease)
     self.dictStorage[disease] = {}
-    
+
     # Iteration über die Entitäten von doc_data -> Filterung nach DRUG + Auftreten des Medikamentes
     for entity in doc_data.ents:
       if entity.label_ == 'DRUG':
-        if entity.text in self.dictStorage[disease]:
-          self.dictStorage[disease][entity.text] += 1
+        if entity.text.lower() in self.dictStorage[disease]:
+          self.dictStorage[disease][entity.text.lower()] += 1
         else:
-          self.dictStorage[disease].update({ entity.text : 1}) 
+          self.dictStorage[disease].update({ entity.text.lower() : 1})
+
+    # Rausfiltern von falschen Einträgen
+    self.filter_drugs(disease)
 
   def getNewDiseasesFromDrug(self, doc_data):
     """ Ermittlung neuer Krankheiten aus den Entitäten eines Medikamentes 
     :param doc_data: Ergebnis eines Entitäten Erkenners von Spacy (noch nicht nach DISEASE gefiltert)
     :return : Dict {<Krankheit> : <Häufigkeit des Auftretens>}
     """
-    
+
     result = {}
     for entity in doc_data.ents:
 
       if entity.label_ == 'DISEASE' and entity.text not in self.dictStorage.keys():
-        if entity.text in result:
-          result[entity.text] += 1
+        if entity.text.lower() in result:
+          result[entity.text.lower()] += 1
         else:
-          result.update({ entity.text : 1}) 
+          result.update({ entity.text.lower() : 1})
         
     return result
 
@@ -50,9 +53,6 @@ class DictCreator():
     :param key: die ausgewählte Krankheit
     :param amount: Anzahl der zu bestimmenden Elemente
     """
-    
-    if "December" in self.dictStorage[key]:
-      del self.dictStorage[key]["December"]
 
     # Umwandlung von Dict zu sortierter Liste
     dict_sorted_asc = sorted(self.dictStorage[key].items(), key=lambda x: x[1] , reverse=True)    
@@ -79,3 +79,22 @@ class DictCreator():
       returnArray.append(ele[0]) 
 
     return returnArray
+
+  # Entfernen die Begriffe, die in der jeweiligen Liste eingetragen sind
+  def filter_drugs(self, disease):
+    for drug in list(self.dictStorage[disease]):
+      if drug in self.drug_filter_list:
+        self.dictStorage[disease].pop(drug)
+
+  def filter_diseases(self, disease_list):
+    for disease in disease_list:
+      if disease[0] in self.disease_filter_list:
+        disease_list.remove(disease)
+
+  drug_filter_list = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september',
+                      'october', 'november', 'december',
+                      'kyoto', 'coronaviridae', 'latinx']
+
+  disease_filter_list = ["death", 'puberty', 'clay', 'sexual behavior', 'increase in mood', 'us-born',
+                         'sexual dimorphism', 'sexual maturity', 'bias', 'muscle mass', 'minerals']
+

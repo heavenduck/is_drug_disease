@@ -1,6 +1,3 @@
-from drugs_for_disease_dict import DrugsForDiseaseDict
-
-
 class Exporter:
     dicts = {}
     output_path = ""

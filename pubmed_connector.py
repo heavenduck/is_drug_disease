@@ -20,14 +20,14 @@ def getDrugs(disease_list , max_paper):
     maxPapers = max_paper  # limit the number of papers retrieved
     myQuery = disease + "[tiab]"  # query in title and abstract
     records = pubmed.getPapers(myQuery, maxPapers, 'xxx.xxx@mailbox.tu-dresden.de')
-    
+
     # Concatenate Abstracts to one long string
     text: str = ''
     for r in records:
       if 'AB' in r:
         text += (r['AB'])
     
-    doc = entity_finder.med7spacy(text)
+    doc = entity_finder.med7spacy(text, disease)
 
     returnDict[disease] = doc
  
