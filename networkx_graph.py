@@ -11,6 +11,12 @@ def graph( data):
     for disease in data:
         for drug in data[disease]:
             graphX.add_edge(disease , drug , weight=data[disease][drug])
+    
+    # remove all nodes with a degree lower or equal 1
+    to_be_removed = [x for x in graphX.nodes() if graphX.degree(x) <= 1]
+
+    for x in to_be_removed:
+        graphX.remove_node(x)
 
     return graphX
 
@@ -50,6 +56,7 @@ def forceAtlas2Impl(G, diseases):
     edges,weights = zip(*nx.get_edge_attributes(G,'weight').items())
     nx.draw_networkx_edges(G, positions, edge_color="darkblue", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
     nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
-    nx.draw_networkx_labels(G, positions, labels=name,  font_size=7)
+    nx.draw_networkx_labels(G, positions, labels=name,  font_size=8)
     plt.axis('off')
-    plt.savefig('books_read.png', dpi=5000)
+    #plt.savefig('books_read.png', dpi=5000)
+    plt.show()
