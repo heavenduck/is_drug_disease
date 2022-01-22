@@ -10,13 +10,15 @@ from scispacy.abbreviation import AbbreviationDetector
 
 class EntityFinder:
     nlp = spacy.load("en_ner_bc5cdr_md")
+    nlp.add_pipe("abbreviation_detector")
+    
     med7 = spacy.load("en_core_med7_lg")
+    med7.add_pipe("abbreviation_detector")
     # Abbreviation Detector
     nlp.add_pipe("abbreviation_detector")
     med7.add_pipe("abbreviation_detector")
 
     def spacy(self, text: str):
-
         doc = self.nlp(text)
         
         # replace acronyms with long form
@@ -30,6 +32,7 @@ class EntityFinder:
         doc = self.nlp(text)
 
         return doc
+
 
     def med7spacy(self, text: str, disease: str):
         """
