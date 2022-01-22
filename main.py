@@ -1,18 +1,18 @@
-from pubmed_connector import *
+#from pubmed_connector import *
 from networkx_graph import *  # Implementation der Darstellung
 
-current_diseases = ["SARS-Cov-2"]
-max_paper = 100
-max_iterations = 2
-dictResult = DictCreator()
+#current_diseases = ["SARS-Cov-2"]
+#max_paper = 100
+#max_iterations = 2
+#dictResult = DictCreator()
 
 def addDict(dict1, dict2):
-    """
-    :param dict1: Dictionary
+  a =    """
+   :param dict1: Dictionary
     :param dict2: Dictionary
     :return: Dictionary mit addierte Values bei Shared Keys
     """
-    result = {}
+    """    result = {}
     for key in dict1:
         if key in dict2:
             result[key] = dict1[key]+dict2[key]
@@ -60,7 +60,8 @@ for i in range(max_iterations):
 # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
 
 print(dictResult.dictStorage)
-
+"""
+  pass
 # Erstellen des Graphen durch networkx 
 g = graph(dictResult.getDict())
 

@@ -14,7 +14,7 @@ def graph( data):
 
     return graphX
 
-def forceAtlas2Impl(G):
+def forceAtlas2Impl(G, diseases):
     """ Zeichnen des Graphen mittels fa2
     :param G: networkx Graph
     """
@@ -40,7 +40,16 @@ def forceAtlas2Impl(G):
         verbose=True)
 
     positions = forceatlas2.forceatlas2_networkx_layout(G, pos=None, iterations=2000)
-    nx.draw_networkx_nodes(G, positions, node_size=20, node_color="black", alpha=0.4)
-    nx.draw_networkx_edges(G, positions, edge_color="darkblue", alpha=0.1)
+    val_map = {}
+    name = {}
+    for d in diseases:
+        val_map[d] = 'red'
+        name[d] = d
+    values = [val_map.get(node, 'green') for node in G.nodes()]
+    #nx.draw(G, node_color=values, labels=name, with_labels = True, font_size=8, edge_color="darkblue", edge_alpha=0.1, font_color="green", node_size=20, font_weight='bold')
+    edges,weights = zip(*nx.get_edge_attributes(G,'weight').items())
+    nx.draw_networkx_edges(G, positions, edge_color="darkblue", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
+    nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
+    nx.draw_networkx_labels(G, positions, labels=name,  font_size=7)
     plt.axis('off')
-    plt.show()
+    plt.savefig('books_read.png', dpi=5000)
