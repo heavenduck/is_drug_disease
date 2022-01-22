@@ -1,7 +1,7 @@
 from pubmed_connector import *
 from networkx_graph import *  # Implementation der Darstellung
 
-current_diseases = ["SARS-Cov-2"]
+current_diseases = ["breast cancer"]
 max_paper = 100
 max_iterations = 2
 dictResult = DictCreator()
@@ -39,6 +39,8 @@ for i in range(max_iterations):
         # Rückgabe der Top x Medikamente für Krankheit x
         top_drugs += dictResult.getTopEntriesOfDict(disease, 10)
     
+    print(top_drugs)
+
     if i != max_iterations-1:
         # Pubmed Anfragen über alle Medikamente in top_drugs
         resultDrugs = getDiseases(top_drugs, max_paper)

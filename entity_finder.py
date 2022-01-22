@@ -8,12 +8,14 @@ from scispacy.abbreviation import AbbreviationDetector
 # it does not differentiate between positive and negative sentences (yet)
 class EntityFinder:
     nlp = spacy.load("en_ner_bc5cdr_md")
+    nlp.add_pipe("abbreviation_detector")
+    
     med7 = spacy.load("en_core_med7_lg")
+    med7.add_pipe("abbreviation_detector")
     # Abbreviation Detector
 
 
     def spacy(self, text: str):
-        nlp.add_pipe("abbreviation_detector")
         doc = self.nlp(text)
         
         # replace acronyms with long form
@@ -29,7 +31,6 @@ class EntityFinder:
         return doc
 
     def med7spacy(self, text: str):
-        med7.add_pipe("abbreviation_detector")
         doc = self.med7(text)
 
         # replace acronyms with long form
@@ -40,6 +41,6 @@ class EntityFinder:
 
         text = (" ".join(altered_tok))
 
-        doc = self.medy(text)
+        doc = self.med7(text)
 
         return doc
