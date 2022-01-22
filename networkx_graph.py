@@ -51,16 +51,23 @@ def forceAtlas2Impl(G, diseases):
     for d in diseases:
         val_map[d] = 'red'
         name[d] = d
-    values = [val_map.get(node, 'green') for node in G.nodes()]
-    #nx.draw(G, node_color=values, labels=name, with_labels = True, font_size=8, edge_color="darkblue", edge_alpha=0.1, font_color="green", node_size=20, font_weight='bold')
+    values = [val_map.get(node, '#3587a0') for node in G.nodes()]
+    
+    fig = plt.figure()
+    
     edges,weights = zip(*nx.get_edge_attributes(G,'weight').items())
-    nx.draw_networkx_edges(G, positions, edge_color="darkblue", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
+    nx.draw_networkx_edges(G, positions, edge_color="#D6F599", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
     nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
     
     for label in positions:
       positions[label] = (positions[label][0] , positions[label][1] + 3 )
 
-    nx.draw_networkx_labels(G, positions, labels=name,  font_size=8)
+    nx.draw_networkx_labels(G, positions, labels=name,  font_size=8, font_color="#AAA")
+    
+    fig.set_facecolor("black")
     plt.axis('off')
+    
+
+
     #plt.savefig('books_read.png', dpi=5000)
     plt.show()
