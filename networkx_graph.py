@@ -89,7 +89,6 @@ def get_color_dict_for_disease(G, disease):
     cmap = plt.get_cmap('autumn')
     for node in G.nodes():
         if node in disease:
-            print(node + ":" + str(G.degree(node)))
             node_colors[node] = colors.to_hex(cmap(1 - norm(G.degree(node))))
         else:
             node_colors[node] = "#3587a0"
