@@ -46,6 +46,7 @@ def forceAtlas2Impl(G, diseases):
         verbose=True)
 
     positions = forceatlas2.forceatlas2_networkx_layout(G, pos=None, iterations=2000)
+    
     val_map = {}
     name = {}
     for d in diseases:
@@ -59,15 +60,14 @@ def forceAtlas2Impl(G, diseases):
     nx.draw_networkx_edges(G, positions, edge_color="#D6F599", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
     nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
     
+    # create label offset
     for label in positions:
       positions[label] = (positions[label][0] , positions[label][1] + 3 )
 
     nx.draw_networkx_labels(G, positions, labels=name,  font_size=8, font_color="#AAA")
     
+    # set background color to black
     fig.set_facecolor("black")
     plt.axis('off')
     
-
-
-    #plt.savefig('books_read.png', dpi=5000)
     plt.show()
