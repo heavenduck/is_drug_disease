@@ -11,10 +11,16 @@ def graph( data):
     for disease in data:
         for drug in data[disease]:
             graphX.add_edge(disease , drug , weight=data[disease][drug])
+    
+    # remove all nodes with a degree lower or equal 1
+    to_be_removed = [x for x in graphX.nodes() if graphX.degree(x) <= 1]
+
+    for x in to_be_removed:
+        graphX.remove_node(x)
 
     return graphX
 
-def forceAtlas2Impl(G):
+def forceAtlas2Impl(G, diseases):
     """ Zeichnen des Graphen mittels fa2
     :param G: networkx Graph
     """
@@ -40,7 +46,28 @@ def forceAtlas2Impl(G):
         verbose=True)
 
     positions = forceatlas2.forceatlas2_networkx_layout(G, pos=None, iterations=2000)
-    nx.draw_networkx_nodes(G, positions, node_size=20, node_color="black", alpha=0.4)
-    nx.draw_networkx_edges(G, positions, edge_color="darkblue", alpha=0.1)
+    
+    val_map = {}
+    name = {}
+    for d in diseases:
+        val_map[d] = 'red'
+        name[d] = d
+    values = [val_map.get(node, '#3587a0') for node in G.nodes()]
+    
+    fig = plt.figure()
+    
+    edges,weights = zip(*nx.get_edge_attributes(G,'weight').items())
+    nx.draw_networkx_edges(G, positions, edge_color="#D6F599", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
+    nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
+    
+    # create label offset
+    for label in positions:
+      positions[label] = (positions[label][0] , positions[label][1] + 3 )
+
+    nx.draw_networkx_labels(G, positions, labels=name,  font_size=8, font_color="#AAA")
+    
+    # set background color to black
+    fig.set_facecolor("black")
     plt.axis('off')
+    
     plt.show()
