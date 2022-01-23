@@ -23,22 +23,25 @@ def graph(data):
     return graphX
 
 
-def forceAtlas2Impl(G, diseases):
+def forceAtlas2Impl(G, diseases, show_all_labels=False):
     """ Zeichnen des Graphen mittels fa2
     :param G: networkx Graph
+    :param diseases: Dict von allen Krankheiten und Medizin
+    :param show_all_labels: anzeigen aller Labels oder nur der Krankheiten
     """
+
     forceatlas2 = ForceAtlas2(
         # Behavior alternatives
         outboundAttractionDistribution=True,  # Dissuade hubs
-        linLogMode=False,  # NOT IMPLEMENTED
-        adjustSizes=False,  # Prevent overlap (NOT IMPLEMENTED)
+        linLogMode=False,
+        adjustSizes=False,
         edgeWeightInfluence=1.0,
 
         # Performance
         jitterTolerance=1.0,  # Tolerance
         barnesHutOptimize=True,
         barnesHutTheta=1.2,
-        multiThreaded=False,  # NOT IMPLEMENTED
+        multiThreaded=False,
 
         # Tuning
         scalingRatio=2.0,
@@ -50,24 +53,30 @@ def forceAtlas2Impl(G, diseases):
 
     positions = forceatlas2.forceatlas2_networkx_layout(G, pos=None, iterations=2000)
 
+    # Erstellung des Label Dicts
     name = {}
-    for d in diseases:
-        name[d] = d
+    if show_all_labels:
+        for key in positions:
+            name[key] = key
+    else:
+        for d in diseases:
+            name[d] = d
+
+    # Speicher für die Farben der Knoten
     values = [get_color_dict_for_disease(G, diseases).get(node, '#3587a0') for node in G.nodes()]
 
     fig = plt.figure()
 
-    edges, weights = zip(*nx.get_edge_attributes(G, 'weight').items())
     nx.draw_networkx_edges(G, positions, edge_color="#D6F599", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
     nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
 
-    # create label offset
+    # Setzt ein Offset an die Labels somit nicht direkt auf dem Knoten
     for label in positions:
-        positions[label] = (positions[label][0], positions[label][1] + 3)
+        positions[label] = (positions[label][0], positions[label][1] + 1)
 
     nx.draw_networkx_labels(G, positions, labels=name, font_size=8, font_color="#AAA")
 
-    # set background color to black
+    # Hintergrundfarbe auf Schwarz setzen
     fig.set_facecolor("black")
     plt.axis('off')
 
