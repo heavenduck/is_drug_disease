@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from pubmed_connector import *
 from networkx_graph import *  # Implementation der Darstellung
 
