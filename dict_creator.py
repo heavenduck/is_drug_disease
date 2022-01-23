@@ -1,4 +1,4 @@
-class DictCreator():
+class DictCreator:
 
   def __init__ (self):
     self.dictStorage = {}
@@ -95,6 +95,6 @@ class DictCreator():
                       'october', 'november', 'december',
                       'kyoto', 'coronaviridae', 'latinx']
 
-  disease_filter_list = ["death", 'puberty', 'clay', 'sexual behavior', 'increase in mood', 'us-born',
+  disease_filter_list = ['death', 'puberty', 'clay', 'sexual behavior', 'increase in mood', 'us-born',
                          'sexual dimorphism', 'sexual maturity', 'bias', 'muscle mass', 'minerals']
 

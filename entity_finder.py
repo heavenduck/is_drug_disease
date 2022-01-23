@@ -1,11 +1,5 @@
-from datetime import datetime
 import spacy
 from scispacy.abbreviation import AbbreviationDetector
-
-
-# this class is a modified version of the spacy_impl
-# it finds the co-occurrences of drugs and a specific disease (drug_dict)
-# it does not differentiate between positive and negative sentences (yet)
 
 
 class EntityFinder:
