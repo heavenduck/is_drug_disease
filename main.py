@@ -3,11 +3,6 @@ from datetime import datetime
 from pubmed_connector import *
 from networkx_graph import *  # Implementation der Darstellung
 
-current_diseases = ["breast cancer"]
-max_paper = 100
-max_iterations = 2
-dictResult = DictCreator()
-
 
 def addDict(dict1, dict2):
     """
@@ -27,57 +22,71 @@ def addDict(dict1, dict2):
     return result
 
 
-for i in range(max_iterations):
+def main():
 
-    print("==== begin sequence {i} ====".format(i=i))
+    current_diseases = ["breast cancer"]
+    max_paper = 200
+    max_iterations = 2
+    top_drug_limit = 15
+    top_disease_limit = 40
+    dictResult = DictCreator()
 
-    # Pubmed Anfragen über alle Krankheiten in current_diseases:
-    # Top x der Medikamente aus erster Anfrage (max_paper = Anzahl Paper)
-    resultDiseases = getDrugs(current_diseases, max_paper)
-    # Filterung aller Medikamente in den Artikeln
-    top_drugs = []
-    for disease in resultDiseases:
-        dictResult.addNewDisease(disease, resultDiseases[disease])
-        # Rückgabe der Top x Medikamente für Krankheit x
+    for i in range(max_iterations):
 
-        top_drugs += dictResult.getTopEntriesOfDict(disease, 15)
+        print("==== begin sequence {i} ====".format(i=i))
 
-    print(top_drugs)
+        # Pubmed Anfragen über alle Krankheiten in current_diseases:
+        # Top x der Medikamente aus erster Anfrage (max_paper = Anzahl Paper)
+        resultDiseases = getDrugs(current_diseases, max_paper)
 
-    if i != max_iterations-1:
+        # Filterung aller Medikamente in den Artikeln
+        top_drugs = []
+        for disease in resultDiseases:
+            dictResult.addNewDisease(disease, resultDiseases[disease])
+            # Rückgabe der Top x Medikamente für Krankheit x
+            top_drugs += dictResult.getTopEntriesOfDict(disease, top_drug_limit)
 
-        # Pubmed Anfragen über alle Medikamente in top_drugs
-        resultDrugs = getDiseases(top_drugs, max_paper)
+        print(top_drugs)
 
-        # Herausfinden aller Krankheiten in den Papern
-        temp_current_diseases = {}
-        for drug in resultDrugs:
-            temp_current_diseases = addDict(temp_current_diseases, dictResult.getNewDiseasesFromDrug(resultDrugs[drug]))
+        if i != max_iterations - 1:
 
-        current_diseases_sorted_asc = sorted(temp_current_diseases.items(), key=lambda x: x[1], reverse=True)
+            # Pubmed Anfragen über alle Medikamente in top_drugs
+            resultDrugs = getDiseases(top_drugs, max_paper)
 
-        # Ausgabe aller Krankheiten nach Auftreten sortiert
-        print(current_diseases_sorted_asc)
+            # Herausfinden aller Krankheiten in den Papern
+            temp_current_diseases = {}
+            for drug in resultDrugs:
+                temp_current_diseases = addDict(temp_current_diseases,
+                                                dictResult.getNewDiseasesFromDrug(resultDrugs[drug]))
 
-        # Rausfiltern von falschen Einträgen
-        dictResult.filter_diseases(current_diseases_sorted_asc)
+            current_diseases_sorted_asc = sorted(temp_current_diseases.items(), key=lambda x: x[1], reverse=True)
 
-        # Pubmed Anfrage: Top 20-50 Krankheiten
-        current_diseases = [el[0] for el in current_diseases_sorted_asc[:20]]
+            # Ausgabe aller Krankheiten nach Auftreten sortiert
+            print(current_diseases_sorted_asc)
 
-# Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
-"""
-# Entfernt alle einträge mit Kookkurrenz von 1
-for disease in dictResult.dictStorage:
-    for drug in list(dictResult.dictStorage[disease].keys()):
-        if dictResult.dictStorage[disease][drug] == 1:
-            dictResult.dictStorage[disease].pop(drug)
-"""
+            # Rausfiltern von falschen Einträgen
+            dictResult.filter_diseases(current_diseases_sorted_asc)
 
-print(dictResult.dictStorage)
+            # Pubmed Anfrage: Top 20-50 Krankheiten
+            current_diseases = [el[0] for el in current_diseases_sorted_asc[:top_disease_limit]]
 
-# Erstellen des Graphen durch networkx 
-g = graph(dictResult.getDict())
+    # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
+    """
+    # Entfernt alle einträge mit Kookkurrenz von 1
+    for disease in dictResult.dictStorage:
+        for drug in list(dictResult.dictStorage[disease].keys()):
+            if dictResult.dictStorage[disease][drug] == 1:
+                dictResult.dictStorage[disease].pop(drug)
+    """
 
-# Zeichnen des Graphen mittels fa2
-forceAtlas2Impl(g, dictResult.getDict())
+    print(dictResult.dictStorage)
+
+    # Erstellen des Graphen durch networkx
+    g = graph(dictResult.getDict())
+
+    # Zeichnen des Graphen mitels fa2
+    forceAtlas2Impl(g, dictResult.getDict())
+
+
+if __name__ == "__main__":
+    main()
