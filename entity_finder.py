@@ -1,5 +1,4 @@
 import spacy
-from scispacy.abbreviation import AbbreviationDetector
 
 
 class EntityFinder:

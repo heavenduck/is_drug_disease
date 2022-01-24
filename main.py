@@ -22,11 +22,11 @@ def addDict(dict1, dict2):
 
 def main():
 
-    current_diseases = ["breast cancer"]
-    max_paper = 150
+    current_diseases = ["parkinson"]
+    max_paper = 200
     max_iterations = 2
-    top_drug_limit = 5
-    top_disease_limit = 5
+    top_drug_limit = 30
+    top_disease_limit = 15
     dictResult = DictCreator()
 
     for i in range(max_iterations):
@@ -59,24 +59,24 @@ def main():
 
             current_diseases_sorted_asc = sorted(temp_current_diseases.items(), key=lambda x: x[1], reverse=True)
 
-            # Ausgabe aller Krankheiten nach Auftreten sortiert
-            print(current_diseases_sorted_asc)
-
             # Rausfiltern von falschen Einträgen
             dictResult.filter_diseases(current_diseases_sorted_asc)
+
+            # Ausgabe aller Krankheiten nach Auftreten sortiert
+            print(current_diseases_sorted_asc)
 
             # Pubmed Anfrage: Top 20-50 Krankheiten
             current_diseases = [el[0] for el in current_diseases_sorted_asc[:top_disease_limit]]
 
     # Knoten mit nur 1 Kante entfernen oder Threshold einbauen?
 
+    print(dictResult.dictStorage)
+
     # Entfernt alle einträge mit Kookkurrenz von 1
     for disease in dictResult.dictStorage:
         for drug in list(dictResult.dictStorage[disease].keys()):
             if dictResult.dictStorage[disease][drug] == 1:
                 dictResult.dictStorage[disease].pop(drug)
-
-    print(dictResult.dictStorage)
 
     # Erstellen des Graphen durch networkx
     g = graph(dictResult.getDict())
