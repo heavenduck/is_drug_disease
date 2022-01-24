@@ -55,8 +55,11 @@ class DictCreator:
     """
 
     # Umwandlung von Dict zu sortierter Liste
-    dict_sorted_asc = sorted(self.dictStorage[key].items(), key=lambda x: x[1] , reverse=True)    
-    
+    dict_sorted_asc = sorted(self.dictStorage[key].items(), key=lambda x: x[1], reverse=True)
+
+    if len(dict_sorted_asc) == 0:
+      return []
+
     # Array der ersten Elemente 
     cut_dict = dict_sorted_asc[:amount] 
     # letztes Element des abgeschnittenen Arrays nehmen
