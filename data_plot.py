@@ -22,6 +22,4 @@ def main(labels_activ=False):
 
 
 if __name__ == "__main__":
-    main(False)
-
-
+    main(True)  # True -> show all labels, False -> show only disease labels
