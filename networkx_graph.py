@@ -63,12 +63,12 @@ def forceAtlas2Impl(G, diseases, show_all_labels=False):
             name[d] = d
 
     # Speicher für die Farben der Knoten
-    values = [get_color_dict_for_disease(G, diseases).get(node, '#3587a0') for node in G.nodes()]
+    values = [get_color_dict_for_disease(G, diseases).get(node, '#b3e6c3') for node in G.nodes()]
 
     fig = plt.figure()
 
-    nx.draw_networkx_edges(G, positions, edge_color="#D6F599", edge_cmap=plt.get_cmap('plasma'), alpha=0.1)
-    nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=0.5)
+    nx.draw_networkx_edges(G, positions, edge_color="#2a7e7b", edge_cmap=plt.get_cmap('plasma'), alpha=0.5)
+    nx.draw_networkx_nodes(G, positions, node_size=15, node_color=values, alpha=1)
 
     # Setzt ein Offset an die Labels somit nicht direkt auf dem Knoten
     for label in positions:
@@ -100,5 +100,5 @@ def get_color_dict_for_disease(G, disease):
         if node in disease:
             node_colors[node] = colors.to_hex(cmap(1 - norm(G.degree(node))))
         else:
-            node_colors[node] = "#3587a0"
+            node_colors[node] = "#61b33c"
     return node_colors
