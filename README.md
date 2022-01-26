@@ -28,7 +28,16 @@ The requirements.visual.txt includes necessary libraries.
 
 ## Output of self-requested data
 
-Under Construction
+To create custom data using a query, the libraries specified in requirements.txt must be installed.
+Since the model en_ner_bc5cdr_md was created with an older version of scispacy, the installation returns a
+compatibility error.
+This can be ignored, since older models are functional with newer spacy versions.
+This is not ideal, but retraining the dataset would have taken too much time for our task.
+It is important to note that a warning is now displayed each time *main.py* is run.
+This can also be ignored.
+
+If the algorithm is finished and shows a picture with mathplotlib, the dictionary can be copied in the console and 
+saved for later.
 
 
 
@@ -64,4 +73,15 @@ Nur für die Ausgabe gibt das requirements.visual.txt.
 
 ## Ausgabe von selbst angefragten Daten
 
-Under Construction
+Für die Erstellung eigener Daten mittels eine Abfrage müssen die Bibliotheken spezifiziert in 
+requirements.txt installiert werden.
+Da das Model en_ner_bc5cdr_md mit einer älteren Version von scispacy erstellt wurde, gibt die Installation am eine
+Kompatibilitätsfehler aus.
+Dieser kann ignoriert werden, da ältere Model mit neueren spacy Versionen funktionsfähig sind.
+Dies ist zwar nicht optimal, aber ein neu Trainieren des Datensatzes hätte für unsere Aufgabe zu viel Zeit 
+in anspruch genommen.
+Wichtig zu wissen ist, dass nun bei jedem durchlauf der *main.py* eine Warning angezeigt wird.
+Diese kann ebenfalls ignoriert werden.
+
+Ist der Algorithmus am Ende und zeigt ein Bild mittels mathplotlib, kann in der Console das Dictionary kopiert werden
+und für später gespeichert werden.
