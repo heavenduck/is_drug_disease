@@ -1,3 +1,7 @@
+# Info
+**This repo is archived and will not be maintained!**
+
+
 # Documentation of the project - English
 In this project there are 2 ways to output data. 
 The simplest is to use already calculated data and plot it using an output script. 
